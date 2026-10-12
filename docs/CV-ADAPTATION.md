@@ -1,6 +1,6 @@
 # CV 适配边界与继承关系
 
-基线为 `Ray8mu34/astro-paper-reading` 的提交 `889b44e8983584aa7e8fb3b4c59f4592ada4f014`，框架 schema 1.1；CV Skill 从该提交本地派生，保留 Git 继承历史，不设置外部推送目标。
+基线为 `Ray8mu34/astro-paper-reading` 的提交 `889b44e8983584aa7e8fb3b4c59f4592ada4f014`，框架 schema 1.1；CV Skill 从该提交派生，保留 Git 继承历史，正式发布于 `Ray8mu34/cv-paper-reading`。
 
 ## 继承的实现
 
@@ -20,4 +20,4 @@
 
 软件回归运行继承的测试；实现继承通过基线 commit 的文件内容比较核对。CV 合成材料用于检查四模式构建、正文/记录隔离、地图、离线 MathML 与页面。CV 决策规则通过具体反例审读，记录在 validation。
 
-没有将合成材料称作真实论文，也没有将作者自查称作独立 Agent 评估；真实 CV 论文试读可另按实际需求执行。记录保存在本地，不进入阅读正文。
+已完成六个独立上下文 Agent 的真实论文试读：ConvNeXt v2、DINOv2 v2、LoFTR v1（两次）、3D Gaussian Splatting v1，以及 ViT/CNN 表征比较 v2。主 Agent 负责调度与打包，用户审阅后接受当前 Skill 为最终版。该记录属于人工试用，不是量化基准或自动评分；合成运行检查与真实试读分别记录，产物保存在仓库之外。

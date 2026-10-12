@@ -1,18 +1,13 @@
-# 第一手来源与版本
+# CV 第一手定义与来源入口
 
-此索引给出参考模块的理论出处；示例对主论文另有逐图表定位。外部库未因被列在此处而被认为安装或测试过。
+具体结果、方法和机制首先引用当前论文、相关原论文及作者版本化代码。以下是核对评估和运行定义的入口，不是预先取得了所有实现或测试过这些库。
 
-| ID | 文献/规范 | 用途 |
-|---|---|---|
-| P20 | Mróz et al., *A terrestrial-mass rogue planet candidate detected in the shortest-timescale microlensing event*, [arXiv:2009.12377v2](https://arxiv.org/abs/2009.12377v2), 2020 | 主观测案例；表1、2、3及图1–4 |
-| G00 | Gould, *A Natural Formalism for Microlensing*, [astro-ph/0001421v1](https://arxiv.org/abs/astro-ph/0001421v1), 2000 | 可观测量、Einstein 半径与物理量；第二案例 |
-| D99 | Dominik, *The binary gravitational lens and its extreme cases*, [astro-ph/9903014v2](https://arxiv.org/abs/astro-ph/9903014v2), 1999 | 二元透镜、渐近与近宽简并 |
-| B18 | Bozza et al., *VBBinaryLensing: a public package for microlensing light curve computation*, [arXiv:1805.05653](https://arxiv.org/abs/1805.05653), 2018 | 可靠有限源数值算法背景；本包未调用该库 |
-| G04 | Gould, *Resolution of the MACHO-LMC-5 Puzzle: The Jerk-Parallax Microlens Degeneracy*, [astro-ph/0311548v2](https://arxiv.org/abs/astro-ph/0311548v2), 2004 | 视差参数化、加速度与 jerk 简并 |
-| S03 | Smith, Mao & Paczyński, *Acceleration and Parallax Effects in Gravitational Microlensing*, [astro-ph/0210370v3](https://arxiv.org/abs/astro-ph/0210370v3), 2003 | 加速度/视差的可混淆性及适用窗口 |
-| E13 | Foreman-Mackey et al., *emcee: The MCMC Hammer*, [arXiv:1202.3665](https://arxiv.org/abs/1202.3665), 2013 | MCMC 与 ensemble sampling；未在本包运行 |
-| S20 | Speagle, *dynesty: A Dynamic Nested Sampling Package for Estimating Bayesian Posteriors and Evidences*, [arXiv:1904.02180](https://arxiv.org/abs/1904.02180), 2020 | 后验与证据的不同任务；未在本包运行 |
-| AS | [Agent Skills specification](https://agentskills.io/specification) | SKILL.md 元数据、目录及按需加载 |
-| PX | [Paper X-Ray](https://github.com/Wang-auspicious/paper-xray), target commit `80fe6a8515d24864b71b3847bd83f963e3485a6e` | 阅读方法与 Figure Kit；获取限制见设计审计 |
+|来源|用途|
+|---|---|
+|[COCO 官方 cocoeval.py](https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocotools/cocoeval.py)|检测/分割/关键点评估，阈值、面积、最大候选与 ignore 的实际定义；记录使用的 revision|
+|[Detectron2 evaluation 文档](https://github.com/facebookresearch/detectron2/blob/main/docs/tutorials/evaluation.md)|区分数据集 evaluator 与模型推断输出，确认任务协议|
+|[PyTorch 随机性文档](https://docs.pytorch.org/docs/stable/notes/randomness.html)|运行环境、随机源与确定性设置的定义；具体版本按论文或实际环境核对|
+|[Astro Paper Reading](https://github.com/Ray8mu34/astro-paper-reading/tree/889b44e8983584aa7e8fb3b4c59f4592ada4f014)|本 Skill 继承的 schema 1.1、阅读分层、离线构建与测试基线|
+|[Paper X-Ray](https://github.com/Wang-auspicious/paper-xray)|原始阅读与视觉设计参考，许可证和版本记录位于 upstream|
 
-主案例按实际读取的 PDF v2（八页）核对；理论案例按实际返回的 v1（九页）核对。版本号与页码均写入 analysis.json。当前最短事件、仪器现况、软件最新版不属于这两个历史案例的结论，未在报告中作现况断言。
+链接是按需核对的入口，不将当前默认值反套到旧论文。主文、附录、模型卡、数据卡、仓库配置与实际执行分别记录来源；无法获得的信息标 unknown。来源清单属于独立记录，正文引用放在具体论断附近。

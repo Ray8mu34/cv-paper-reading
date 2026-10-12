@@ -19,7 +19,7 @@ def validate_skill(root):
             errors.append(f"Missing required file: {name}")
     text = (root / "SKILL.md").read_text(encoding="utf-8-sig")
     front = yaml.safe_load(text.split("---", 2)[1])
-    if front.get("name") != "astro-paper-reading" or not isinstance(front.get("description"), str):
+    if front.get("name") != "cv-paper-reading" or not isinstance(front.get("description"), str):
         errors.append("Invalid Skill metadata")
     for path in [root / "SKILL.md", *list((root / "references").glob("*.md"))]:
         for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", path.read_text(encoding="utf-8-sig")):

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Astro Paper X-Ray shared scientific state and reader edition",
+  "title": "CV Paper Reading shared scientific state and reader edition",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "status", "mode", "paper", "coverage", "sources", "question", "concepts", "claims", "parameters", "assumptions", "sections", "unknowns", "reproduction", "artifacts"],

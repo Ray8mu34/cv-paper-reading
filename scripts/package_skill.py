@@ -26,13 +26,13 @@ def package(out):
     with zipfile.ZipFile(out,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
         for path,rel in members:
             content=path.read_bytes()
-            name="astro-paper-reading/"+rel.as_posix()
+            name="cv-paper-reading/"+rel.as_posix()
             info=zipfile.ZipInfo(name,date_time=(2026,10,12,0,0,0))
             info.compress_type=zipfile.ZIP_DEFLATED
             info.external_attr=0o100644<<16
             z.writestr(info,content)
             manifest.append(dict(path=name,bytes=len(content),sha256=hashlib.sha256(content).hexdigest()))
-        z.writestr("astro-paper-reading/RELEASE-MANIFEST.json",json.dumps(manifest,indent=2))
+        z.writestr("cv-paper-reading/RELEASE-MANIFEST.json",json.dumps(manifest,indent=2))
     with zipfile.ZipFile(out) as z:
         if z.testzip():raise ValueError("ZIP CRC failed")
     record=dict(zip=str(out.resolve()),sha256=hashlib.sha256(out.read_bytes()).hexdigest(),bytes=out.stat().st_size,files=len(manifest),excluded="Git/cache/build folders and downloaded paper PDF/text/source page images; downloaded literature and local execution records excluded")
@@ -43,5 +43,5 @@ def package(out):
 
 if __name__=="__main__":
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--out",type=Path,default=ROOT/"dist/astro-paper-reading-v1.1.skill.zip")
+    p.add_argument("--out",type=Path,default=ROOT/"dist/cv-paper-reading-v1.0.skill.zip")
     package(p.parse_args().out)

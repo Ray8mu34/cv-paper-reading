@@ -30,7 +30,7 @@ components:
     rounded: "{rounded.control}"
 ---
 
-# Astro Paper X-Ray design
+# CV Paper Reading design
 
 ## Overview
 

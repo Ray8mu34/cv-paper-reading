@@ -339,7 +339,7 @@ def build_html(markdown, *, demo=None, root=ROOT, analysis=None, workspace=None)
         placeholder = f"<p>ASTROINSERT{module.replace('-', '').upper()}</p>"
         component = (root / f"assets/{module}.html").read_text(encoding="utf-8")
         body = body.replace(placeholder, component)
-    title = next((l[2:] for l in markdown.splitlines() if l.startswith("# ")), "Astro Paper Reading")
+    title = next((l[2:] for l in markdown.splitlines() if l.startswith("# ")), "CV Paper Reading")
     css = (root / "assets/report.css").read_text(encoding="utf-8")
     css += '\n' + '\n'.join(visual_css)
     script = (root / "assets/report.js").read_text(encoding="utf-8") if modules else ""
@@ -350,6 +350,6 @@ def build_html(markdown, *, demo=None, root=ROOT, analysis=None, workspace=None)
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; base-uri 'none'">
 <meta name="astro-analysis-sha256" content="{digest.group(1) if digest else ''}">
 <title>{html.escape(title)}</title><style>{css}</style></head>
-<body><header class="masthead"><span>ASTRO PAPER READING</span><span>理解问题，走进论证</span></header>
-<main><article>{body}</article></main><footer><span>Astro Paper Reading</span><a href="{html.escape((analysis or {}).get('artifacts', {}).get('notes', 'analysis-notes.md'), quote=True)}">科学与构建记录</a></footer>
+<body><header class="masthead"><span>CV PAPER READING</span><span>理解问题，走进论证</span></header>
+<main><article>{body}</article></main><footer><span>CV Paper Reading</span><a href="{html.escape((analysis or {}).get('artifacts', {}).get('notes', 'analysis-notes.md'), quote=True)}">科学与构建记录</a></footer>
 <script type="application/json" id="astro-data">{payload}</script><script>{script}</script>{''.join(visual_scripts)}</body></html>'''

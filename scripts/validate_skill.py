@@ -9,11 +9,12 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from astro_xray.report import ROOT, build_html, read_json, render_markdown, render_notes, safe_artifact, validate_analysis, validate_demo
+from astro_xray.reader_review import validate_reader_review
 
 
 def validate_skill(root):
     errors = []
-    required = ["SKILL.md", "schemas/analysis.schema.json", "references/visualization.md", "references/component-contract.md", "references/quality-gates.md", "scripts/new_analysis.py", "scripts/build_report.py", "scripts/validate_skill.py", "docs/DESIGN-AUDIT.md", "assets/report.css", "assets/report.js", "assets/single-lens.html", "assets/binary-lens.html"]
+    required = ["SKILL.md", "schemas/analysis.schema.json", "schemas/reader-review.schema.json", "references/narrative-workflow.md", "references/visualization.md", "references/component-contract.md", "references/quality-gates.md", "scripts/new_analysis.py", "scripts/build_report.py", "scripts/prepare_reader_review.py", "scripts/validate_skill.py", "docs/DESIGN-AUDIT.md", "assets/report.css", "assets/report.js", "assets/single-lens.html", "assets/binary-lens.html"]
     for name in required:
         if not (root / name).is_file():
             errors.append(f"Missing required file: {name}")
@@ -29,6 +30,7 @@ def validate_skill(root):
             if not dest.is_relative_to(root.resolve()) or not dest.exists():
                 errors.append(f"Broken local reference in {path.name}: {target}")
     jsonschema.Draft202012Validator.check_schema(read_json(root / "schemas/analysis.schema.json"))
+    jsonschema.Draft202012Validator.check_schema(read_json(root / "schemas/reader-review.schema.json"))
     return errors
 
 
@@ -37,16 +39,22 @@ def main():
     p.add_argument("--root", type=Path, default=ROOT)
     p.add_argument("--analysis", type=Path)
     p.add_argument("--require-artifacts", action="store_true")
+    p.add_argument("--require-reader-review", action="store_true", help="Check the current manual review record, not prose quality")
+    p.add_argument("--md-only", action="store_true", help="Validate a Markdown-only delivery without requiring HTML")
     p.add_argument("--demo-data", type=Path)
     args = p.parse_args()
     errors = validate_skill(args.root)
     if args.require_artifacts and not args.analysis:
         p.error("--require-artifacts needs --analysis")
+    if args.require_reader_review and not args.require_artifacts:
+        p.error("--require-reader-review needs --require-artifacts")
     if args.analysis:
         data = validate_analysis(read_json(args.analysis), publish=args.require_artifacts, root=args.root)
         if args.require_artifacts:
             artifacts = dict(notes='analysis-notes.md', **data['artifacts']) if 'notes' not in data['artifacts'] else data['artifacts']
             for kind, rel in artifacts.items():
+                if kind == 'html' and args.md_only:
+                    continue
                 path = safe_artifact(args.analysis.parent, rel)
                 if not path.is_file() or not path.stat().st_size:
                     errors.append(f"Missing {kind} artifact: {path}")
@@ -64,6 +72,8 @@ def main():
                             demo = json.loads(embedded.group(1), parse_constant=lambda s: (_ for _ in ()).throw(ValueError(s)))
                     if build_html(render_markdown(data), demo=demo, root=args.root, analysis=data, workspace=args.analysis.parent) != content:
                         errors.append("HTML content/assets do not match current analysis and data; rebuild")
+        if args.require_reader_review:
+            validate_reader_review(data, args.analysis.parent, md_only=args.md_only, root=args.root)
     if args.demo_data:
         validate_demo(read_json(args.demo_data))
     for e in errors:
@@ -71,6 +81,8 @@ def main():
     if errors:
         return 1
     print("PASS: skill structure, references and requested state/artifacts")
+    if args.require_reader_review:
+        print("Manual reader-review record matches the delivery; prose comprehension is not automatically verified")
     return 0
 
 

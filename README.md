@@ -1,98 +1,58 @@
-# CV Paper Reading
+# CV Paper Reading v1.2.1（轻量化修订）
 
-让有计算机视觉与机器学习基础、尚未读过原文的研究生，先理解研究问题、核心贡献、主要结论与原文论证结构，再深入关键机制和决定性证据。支持离线 HTML、Markdown 精读和批判性阅读。
+面向有 CV/ML 基础、尚未读过论文的研究生。默认**沿论文作者的章节和论证顺序**解释研究动机、方案选择、关键机制与数学、主要原图和实验证据，最后再作独立评价。保留技术深度，不用额外验收流程填充工作量。
 
-**正式版：1.0.0。** 基于已验收的 [Astro Paper Reading](https://github.com/Ray8mu34/astro-paper-reading/tree/889b44e8983584aa7e8fb3b4c59f4592ada4f014)，继承阅读框架、专业排版、离线公式和图形嵌入，重点适配 CV 的内容选择与证据分析。
+## v1.2.1 改动
+
+- **保留** v1.2.0 的原文 `reader.roadmap`、正文 `source_sections` 章节映射及覆盖/顺序校验；保留公式、关键图表与科学证据核查。
+- **取消日常强制**：前四分之一阅读理解检验、逐章无提示复述、`reader-review.json` 人工验收记录、额外读者调用和多轮自查。
+- **省去重复计划**：schema 1.3 的 `reader.throughline`、`reader.connections` 改为可选工作笔记；真正复杂的论文仍可填写。历史 schema 1.2 的合同保持不变。
+- **每篇论文只做一次必要检查**：原文章序与覆盖、核心公式/图表/结论、构建产物。发现具体错误才针对性重查。
+- **保留可选高级能力**：独立读者评测及相关脚本、`critical-review`、HTML 交互、复现与软件开发测试；不默认执行。
 
 ## 安装
 
-这是完整的 Codex Skill，安装整个目录，保留 `SKILL.md` 相邻的代码、参考文档和资产。默认位置为 `~/.codex/skills/cv-paper-reading/`；自定义了 `CODEX_HOME` 时，使用其 `skills/` 目录。
+从 [GitHub Releases](https://github.com/Ray8mu34/cv-paper-reading/releases/latest) 下载 Skill ZIP，解压后将其中 `cv-paper-reading/` 放在 `~/.codex/skills/cv-paper-reading/`；Windows PowerShell 常见路径是 `$env:USERPROFILE\.codex\skills\cv-paper-reading\`。该目录下应直接看到 `SKILL.md`，不要出现嵌套的两个 `cv-paper-reading/`。
 
-**方式一：让 Codex 安装。** 在聊天中请求：
-
-```text
-请使用 $skill-installer 从 https://github.com/Ray8mu34/cv-paper-reading 安装根目录的 Skill，名称为 cv-paper-reading，版本 v1.0.0。
-```
-
-**方式二：使用 Git。** 目标目录尚不存在时，Windows PowerShell：
+也可以在目标目录尚不存在时，从仓库安装当前版本：
 
 ```powershell
-git clone --branch v1.0.0 https://github.com/Ray8mu34/cv-paper-reading.git "$env:USERPROFILE/.codex/skills/cv-paper-reading"
+git clone --branch v1.2.1 https://github.com/Ray8mu34/cv-paper-reading.git "$env:USERPROFILE/.codex/skills/cv-paper-reading"
 ```
 
-macOS / Linux：
+新的 Codex 会话直接调用：
+
+```text
+请使用 $cv-paper-reading 精读这篇论文：<PDF或链接>。
+按原文主要章节及论证顺序解释研究动机、方法选择、关键公式与实验原图，生成离线 HTML 报告。
+```
+
+## 日常使用（无需开发测试）
+
+需要 Python 3.10+ 和 [pyproject.toml](pyproject.toml) 列出的运行依赖；不需要 PyTorch、模型权重或浏览器回归。Agent 阅读原文后填写 `analysis.json`，设置 `status=ready`。从 Skill 根目录执行：
 
 ```sh
-git clone --branch v1.0.0 https://github.com/Ray8mu34/cv-paper-reading.git "$HOME/.codex/skills/cv-paper-reading"
+python scripts/new_analysis.py INPUT --mode interactive-html --out WORK
+# 填写 WORK/analysis.json 后：
+python scripts/build_report.py --analysis WORK/analysis.json
+python scripts/validate_skill.py --analysis WORK/analysis.json --require-artifacts
 ```
 
-**方式三：使用 ZIP。** 下载 [正式版安装包](https://github.com/Ray8mu34/cv-paper-reading/releases/latest)，将其中的 `cv-paper-reading/` 解压至上述 `skills/` 目录。确认入口为 `skills/cv-paper-reading/SKILL.md`，不要额外嵌套同名目录。
+Markdown-only 时，在最后两条命令中添加 `--md-only`。验证脚本只检验结构与产物一致性，不会自己判断内容是否易懂。日常不调用 `prepare_reader_review.py`、不填写 `validation/reader-review.json`、不跑 pytest 或全量浏览器检查。用户明确要求评估首次阅读体验时，才启用保留的读者评测脚本及 `--require-reader-review`。
 
-安装后开启新聊天，确认可以调用 `$cv-paper-reading`。已有安装时，先将旧目录备份到 `skills/` 之外，再安装指定版本；阅读产物保存在独立工作目录，方便更新。Git 安装可用 `git fetch --tags` 后 `git checkout <版本标签>` 切换版本；跟随开发分支可切换至 `main` 后使用 `git pull --ff-only`。
+## 能力与边界
 
-## 调用
+`quick`、`deep-md`、`interactive-html`、`critical-review` 均保留。对于深度报告，仍应对照**真实 PDF 目录**检查是否漏掉关键章节；程序只验证已经登记在 roadmap 中的章节。复杂公式和原图仍应讲透，但不会因为篇幅或内部检查配额而添加无关细节。所有来源与许可、离线 HTML/MathML、证据账本以及继承的数值/前端组件保留。旧版 schema 1.0–1.2 的报告仍然兼容。
 
-```text
-请使用 $cv-paper-reading 深度解读这篇论文：<论文链接或 PDF>。
-按照 Skill 的默认方式生成完整的离线 HTML 报告。
+[SKILL 主指令](SKILL.md) · [原文优先工作流](references/narrative-workflow.md) · [质量检查](references/quality-gates.md) · [Changelog](CHANGELOG.md)
+
+## 仅开发 Skill 时运行
+
+```sh
+python -m pytest -q
+python scripts/validate_skill.py
+python scripts/package_skill.py --out dist/cv-paper-reading-v1.2.1.skill.zip
+python scripts/check_release.py dist/cv-paper-reading-v1.2.1.skill.zip
 ```
 
-默认先给研究概览和对应原文 § 编号的论证导览，再围绕重要、困难的机制深入解释。关键推导充分展开；可视化按理解增益选择，不设数量指标。执行记录与来源全集独立保存，正文聚焦科学问题。
-
-模式包括 `quick`、`deep-md`、`interactive-html`、`critical-review`，见 [输出模式](references/output-modes.md)。常规产物为 `report.html`、`report.md`、`analysis-notes.md`。HTML 的公式与嵌入图形可离线阅读，无需服务器。
-
-## CV 内容与证据规则
-
-- 判断贡献在表示、目标、数据、训练、推断、评估、理论还是系统，选择值得深讲的问题。
-- 将主张与证据对应，区分配置表现、机制归因、泛化、稳定性和效率。
-- 核对预训练、监督、模型、预算、分辨率及评估协议，解释相异条件下的结果。
-- 分析消融支持多强的结论；明确定性图、注意力与特征图的证据范围。
-- 按表征、检测分割、生成、视觉语言、三维几何等任务选择相关约定。
-
-详见 [内容选择](references/cv-content-selection.md)、[证据分析](references/cv-evidence.md)、[任务约定](references/cv-task-conventions.md)、[统计与效率](references/statistics.md)、[可视化选择](references/visualization.md)。
-
-## 运行环境与开发
-
-需要 Python **3.10 或以上**，依赖见 [pyproject.toml](pyproject.toml)。优先使用现有项目环境。阅读和报告构建无需 PyTorch、下载权重或训练模型。
-
-以下命令在仓库根目录执行，使用现有 Conda 环境 `dl_env`；其他环境使用其对应 Python：
-
-```powershell
-conda run -n dl_env python -m pip install -e .
-conda run -n dl_env python scripts/validate_skill.py
-conda run -n dl_env python scripts/new_analysis.py '<论文链接或PDF>' --mode interactive-html --out reading-work
-```
-
-Agent 阅读论文并填写 schema 1.1 的概览、导览、重点、正文、主张、来源与图形选择，设置 `status=ready` 后构建。CLI 负责确定性构建与检查，不会自行调用模型分析论文：
-
-```powershell
-conda run -n dl_env python scripts/build_report.py --analysis reading-work/analysis.json
-conda run -n dl_env python scripts/validate_skill.py --analysis reading-work/analysis.json --require-artifacts
-```
-
-仅构建 Markdown 可加 `--md-only`。工作目录应放在安装目录之外。
-
-## 示例与验证
-
-[CV 比较协议示例](examples/protocol-reading/README.md) 使用明确标注的合成材料，展示相异 recipe、匹配对照与百分点/显著性的区别；表格和文字足够时不添加交互。
-
-本版本已用于六个独立 Agent 的试读：ConvNeXt、DINOv2、LoFTR（两次独立生成）、3D Gaussian Splatting，以及 *Do Vision Transformers See Like Convolutional Neural Networks?*。用户审阅后接受当前版本。试读产物独立于仓库保存，这次试读不提供自动评分或量化效果保证。
-
-开发检查与打包：
-
-```powershell
-conda run -n dl_env python -m pip install -e '.[test]'
-conda run -n dl_env python -m pytest -q
-conda run -n dl_env python scripts/build_report.py --analysis examples/protocol-reading/analysis.json
-conda run -n dl_env python scripts/validate_skill.py --analysis examples/protocol-reading/analysis.json --require-artifacts
-conda run -n dl_env python scripts/package_skill.py
-conda run -n dl_env python scripts/check_release.py dist/cv-paper-reading-v1.0.skill.zip
-```
-
-浏览器检查需要本机 Chromium。运行记录写入被 Git 忽略的 `validation/`，不进入文章。框架继承、适配范围与验证层级见 [适配说明](docs/CV-ADAPTATION.md)。
-
-`astro_xray` 包名、微透镜模块和 OGLE 夹具保留作兼容性与回归资源，CV 阅读不加载这些教学模块。新 CV 图形通过现有 manifest 接入，未另建训练框架。
-
-## 来源与许可
-
-使用 [MIT License](LICENSE)，保留 Astro Paper Reading 与 [Paper X-Ray](https://github.com/Wang-auspicious/paper-xray) 的来源、版权和设计参考。论文、原图和第三方数据遵循各自授权；本仓库不随附下载的论文或私人阅读材料。
+这些程序测试**不会**在每篇论文阅读时触发。源码与安装包均在本仓库发布；安装包见 [v1.2.1 Release](https://github.com/Ray8mu34/cv-paper-reading/releases/tag/v1.2.1)。

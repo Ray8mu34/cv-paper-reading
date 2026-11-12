@@ -1,3 +1,5 @@
+> 历史适配记录：下文关于“schema 未修改”的描述仅适用于最初 CV 适配。1.2.0 已增加 schema 1.3 原文章序映射、简短前置导览和覆盖/顺序验证，详见 [阅读架构](READER-ARCHITECTURE.md)；继承的科学计算模块仍未改动。
+
 # CV 适配边界与继承关系
 
 基线为 `Ray8mu34/astro-paper-reading` 的提交 `889b44e8983584aa7e8fb3b4c59f4592ada4f014`，框架 schema 1.1；CV Skill 从该提交派生，保留 Git 继承历史，正式发布于 `Ray8mu34/cv-paper-reading`。

@@ -19,7 +19,7 @@ def package(out):
     for path in sorted(ROOT.rglob("*")):
         rel=path.relative_to(ROOT)
         if not path.is_file() or any(p in excluded or p.endswith(".egg-info") for p in rel.parts):continue
-        if path.name in {"paper.pdf","paper-extracted.txt","release-manifest.json","package.json","package-lock.json"} or path.suffix in {".pyc",".pyo"}:continue
+        if path.name in {"paper.pdf","paper-extracted.txt","release-manifest.json","RELEASE-MANIFEST.json","package.json","package-lock.json"} or path.suffix in {".pyc",".pyo"}:continue
         members.append((path,rel))
     out.parent.mkdir(parents=True,exist_ok=True)
     manifest=[]
@@ -43,5 +43,5 @@ def package(out):
 
 if __name__=="__main__":
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--out",type=Path,default=ROOT/"dist/cv-paper-reading-v1.0.skill.zip")
+    p.add_argument("--out",type=Path,default=ROOT/"dist/cv-paper-reading-v1.2.1.skill.zip")
     package(p.parse_args().out)

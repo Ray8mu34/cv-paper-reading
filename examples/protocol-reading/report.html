@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; base-uri 'none'">
+<meta name="astro-analysis-sha256" content="1c8cbedfda1fedf08579babe76e6b4151e9f0f295f4f4f08153a5d9cd70c3c8a">
+<title>CV 证据阅读示例：从分数提升到模块贡献</title><style>:root { --paper:#ffffff; --ink:#1c2833; --muted:#516270; --line:#c9d4dd; --blue:#245ea0; --red:#a33d47; --panel:#f3f6f9; }
+* {box-sizing:border-box; scrollbar-width:thin; scrollbar-color:var(--muted) var(--panel)}
+body {margin:0; background:var(--paper); color:var(--ink); font:17px/1.85 Georgia,"Noto Serif SC","Source Han Serif SC",SimSun,serif}
+.masthead,footer {max-width:1100px; margin:auto; padding:24px; font:12px/1.5 Consolas,monospace; color:var(--muted); border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:20px}
+main {max-width:1100px; margin:auto; padding:36px 24px 70px}
+h1 {font:500 clamp(24px,2.7vw,34px)/1.45 Georgia,SimSun,serif; max-width:none; margin:0 auto 24px}
+h2 {font:600 25px/1.5 Georgia,SimSun,serif; margin:50px 0 18px; border-top:1px solid var(--line); padding-top:20px}
+p,li {max-width:78ch; overflow-wrap:anywhere}
+a {color:var(--blue); text-underline-offset:3px}
+code,pre {font-family:Consolas,monospace} pre {overflow:auto; padding:14px; background:var(--panel)}
+table {display:block; max-width:100%; overflow:auto; border-collapse:collapse; font-size:14px}
+th,td {padding:9px 12px; border-bottom:1px solid var(--line); text-align:left; min-width:70px}
+footer {border-top:1px solid var(--line); border-bottom:0}
+:focus-visible {outline:3px solid var(--blue); outline-offset:4px}
+.experiment {margin:28px 0 40px; border-top:2px solid var(--ink); border-bottom:1px solid var(--line); padding:20px 0 14px}
+.figure-heading {display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:6px 20px}
+h3 {margin:0; font-size:22px; font-weight:600} .basis,.instruction,.numerical-note,figcaption {color:var(--muted); font:14px/1.7 "Segoe UI","Microsoft YaHei",sans-serif}
+.instruction {max-width:90ch; margin:14px 0 22px} .numerical-note {max-width:none}
+.plots {display:grid; grid-template-columns:repeat(2,minmax(0,1fr));gap:20px} figure {margin:0; min-width:0}
+h4 {font:600 14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif;margin:0 0 8px;color:var(--ink)}
+svg {display:block; width:100%; height:auto; background:var(--paper)} figcaption {margin:6px 0 12px; font-size:12px; min-height:60px}
+.binary-plots {grid-template-columns:repeat(3,minmax(0,1fr))}
+.plot-frame {fill:var(--paper);stroke:var(--line);stroke-width:1}
+.grid-line {stroke:var(--line);stroke-width:.6;opacity:.55}.zero-line{stroke:var(--muted);stroke-width:.8;opacity:.6}
+.tick,.axis-label,.plot-note {fill:var(--muted);font:16px "Segoe UI","Microsoft YaHei",sans-serif}
+.axis-label {fill:var(--ink);font-size:16px}.plot-note{font-size:14px}
+svg path {fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.model,.critical {stroke:var(--blue);stroke-width:1.8}.caustic {stroke:var(--red);stroke-width:1.8}
+.analytic {stroke:var(--muted);stroke-width:1.1;stroke-dasharray:5 4;opacity:.75}
+.trajectory {stroke:var(--muted);stroke-width:1;stroke-dasharray:7 4}
+.einstein {fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+.source-disk {fill:var(--red);fill-opacity:.09;stroke:var(--red);stroke-width:1.5}
+.separation,.time-line{stroke:var(--red);stroke-width:1;stroke-dasharray:3 3}
+.lens{fill:var(--ink)}.lens-mark{stroke:var(--ink);stroke-width:1.2}
+.current{fill:var(--red);stroke:var(--paper);stroke-width:1.5}.schematic-point{fill:var(--paper);stroke:var(--muted);stroke-width:1}
+.observation{fill:var(--paper);stroke:var(--muted);stroke-width:1}.error-bar{stroke:var(--muted);stroke-width:.8;opacity:.65}
+.controls {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px;padding:18px 0;border-top:1px solid var(--line)}
+label {position:relative; display:block; font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif;min-width:0}
+label output {display:block; font-family:Consolas,monospace;min-width:50px;min-height:22px;margin-top:2px;text-align:left}
+input[type=range]{display:block;width:100%;margin:12px 0 0;accent-color:var(--blue);cursor:pointer;height:24px}
+select,button {font:14px/1.5 "Segoe UI","Microsoft YaHei",sans-serif;border:1px solid var(--line);border-radius:2px;background:var(--paper);color:var(--ink);cursor:pointer;min-height:40px;padding:7px 10px}
+select{display:block;width:100%;margin-top:8px} button:hover,select:hover {border-color:var(--blue);background:var(--panel)}
+button:active {background:var(--line)} button:disabled{opacity:.55;cursor:default}
+.check {display:flex;align-items:center;gap:10px;min-height:40px;padding-top:20px}.check input {accent-color:var(--blue);width:18px;height:18px;cursor:pointer}
+.figure-status {display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;min-height:52px}
+.figure-status output{font:13px/1.8 Consolas,"Microsoft YaHei",monospace;color:var(--muted)}
+.error {border-left:3px solid var(--red);padding:12px;background:var(--panel);font:14px/1.6 "Microsoft YaHei",sans-serif}
+.equation {max-width:100%;overflow:auto;padding:12px 4px;font-size:1.1em} math{max-width:100%}
+article > p,article > ul,article > ol,article > h1,article > h2,article > h3,article > .equation {max-width:780px;margin-left:auto;margin-right:auto}
+article > table {width:100%;font-size:15px;line-height:1.7;margin:24px auto;max-width:1000px}
+article > table th:first-child,article > table td:first-child {min-width:150px}
+.source-figure {max-width:860px;margin:28px auto 36px}
+.source-figure img {display:block;width:100%;height:auto;background:var(--paper)}
+.source-figure figcaption,.visual-caption {max-width:780px;margin:12px auto;font:14px/1.75 "Segoe UI","Microsoft YaHei",sans-serif;color:var(--muted);min-height:0}
+.reading-nav,.supplement {margin:28px auto;max-width:1000px;border-block:1px solid var(--line);padding:16px 0}
+summary {cursor:pointer;color:var(--blue);font:15px/1.7 "Segoe UI","Microsoft YaHei",sans-serif;min-height:32px}
+summary:hover {color:var(--ink)}summary:active {color:var(--muted)}
+.reading-nav ul {display:flex;flex-wrap:wrap;gap:12px 28px;list-style:none;padding:0;margin:18px 0 6px}
+.supplement-content {padding-top:12px}.supplement-content p,.supplement-content ul,.supplement-content h2 {max-width:780px;margin-left:auto;margin-right:auto}
+.reader-interactive {margin:30px 0}.reader-interactive .experiment {margin-bottom:12px}
+.supplement h2 {font-size:23px}.supplement .source-figure {max-width:780px}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--panel)}::-webkit-scrollbar-thumb{background:var(--muted)}::-webkit-scrollbar-thumb:hover{background:var(--ink)}
+@media(max-width:900px){.binary-plots{grid-template-columns:repeat(2,minmax(0,1fr))}.binary-plots figure:first-child{grid-column:1/-1;max-width:480px;margin:auto}}
+@media(max-width:700px){body{font-size:16px}main{padding:24px 18px 50px}.masthead{padding:18px}.masthead span:last-child{display:none}.plots,.binary-plots{grid-template-columns:1fr}.binary-plots figure:first-child{grid-column:auto;max-width:none;width:100%}.controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}figcaption{min-height:0}.figure-heading{display:block}.basis{display:block;margin-top:6px}h2{font-size:22px}}
+@media(max-width:380px){.controls{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;animation:none;transition:none}}
+@media(forced-colors:active){*{scrollbar-color:auto}.source-disk{fill:Canvas;stroke:CanvasText}.model,.critical,.caustic{stroke:CanvasText}.current,.lens{fill:CanvasText}}
+@media print{.controls,.figure-status{display:none}.experiment{break-inside:avoid}body{font-size:11pt}main{padding:0}.masthead{position:static}}
+
+</style></head>
+<body><header class="masthead"><span>CV PAPER READING</span><span>理解问题，走进论证</span></header>
+<main><article><h1>CV 证据阅读示例：从分数提升到模块贡献</h1>
+<p>这份合成教学材料讨论一个常见的 CV 阅读问题：新模块的配置分数更高时，究竟能得到多强的结论？最初比较从 80% 到 82%，同时改变了预训练和训练安排；匹配关键条件后，差值只有 0.2 个百分点。先区分整套配置的表现与模块归因，再解释匹配对照、机制与统计判断如何连接。</p>
+<h2 id="reading-heading-0">原文结构导览</h2>
+<table>
+<thead>
+<tr>
+  <th>原文章节</th>
+  <th>在论证中的作用</th>
+  <th>回到原文看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>§1 · 问题</td>
+  <td>区分实际配置表现与模块的贡献</td>
+  <td>分类任务与归因问题</td>
+</tr>
+<tr>
+  <td>§2 · 方法与信息</td>
+  <td>定位模块改变，并明确本材料不提供架构机制</td>
+  <td>backbone 与 X 路径</td>
+</tr>
+<tr>
+  <td>§3 · 结果</td>
+  <td>提供可比较和不可直接归因的条件对照</td>
+  <td>合成结果表与单次结果条件</td>
+</tr>
+<tr>
+  <td>§4 · 解释范围</td>
+  <td>限定结论并指向有区分力的实验</td>
+  <td>机制、稳定性与泛化的证据范围</td>
+</tr>
+</tbody>
+</table>
+<details class="reading-nav"><summary>选择一个问题深入阅读</summary><nav aria-label="深入阅读路线"><ul><li><a href="#section-comparison">2 个百分点为什么不等于模块的独立收益？</a></li><li><a href="#section-evidence">匹配对照能支持哪一层结论？</a></li></ul></nav></details><h2 id="section-problem">为什么要先分清“配置表现”和“模块贡献”？</h2>
+<p>一个模块的设计目标可能是让特征交换更多有用信息，但准确率表格首先测量的是整套训练和推断配置。方法解释回答“改变了什么”，实验解释回答“这个改变在哪些条件下与结果有关”。二者需要通过合适的对照连接，而不是看到分数更高就跳到机制结论。</p>
+<h2 id="section-comparison">比较时真正被改变了哪些条件？</h2>
+<p>先把四个配置放在一起看。</p>
+<table>
+<thead>
+<tr>
+  <th>配置</th>
+  <th>训练数据</th>
+  <th>epochs</th>
+  <th>分辨率</th>
+  <th>Top-1 (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Base</td>
+  <td>目标数据</td>
+  <td>100</td>
+  <td>224</td>
+  <td>80.0</td>
+</tr>
+<tr>
+  <td>X</td>
+  <td>目标+外部预训练</td>
+  <td>300</td>
+  <td>224</td>
+  <td>82.0</td>
+</tr>
+<tr>
+  <td>Base matched</td>
+  <td>目标+外部预训练</td>
+  <td>300</td>
+  <td>224</td>
+  <td>81.8</td>
+</tr>
+<tr>
+  <td>X large</td>
+  <td>目标+外部预训练</td>
+  <td>300</td>
+  <td>384</td>
+  <td>83.0</td>
+</tr>
+</tbody>
+</table>
+<p><em>固定的合成教学数值；不是实际训练结果。</em></p>
+<p>X 相比最初 Base 增加了外部预训练，并使用更长的训练安排。因此两行的 2 个百分点差异描述整套配置的变化，同时改变的因素阻止了直接把全部差值归给模块。Base matched 把关键数据和训练条件对齐后，提供了更贴近模块归因的问题。</p>
+<h2 id="section-evidence">匹配对照究竟提供了多少信息？</h2>
+<p>X 与 Base matched 的差值是 82.0−81.8=0.2 个百分点。它支持的是：在这组给定条件和固定结果中，使用 X 的配置取得略高的数值。X 增加容量，仍存在“更多容量”这一替代解释；要检验独特交互机制，可比较容量和预算匹配的替代路径。</p>
+<p>每行只有一个值，无法从中估计训练种子波动或每样本配对差异；这不等于差异必然是噪声，也不等于统计显著。X large 再提高分辨率后达到 83.0%，说明又改变了一个条件，而不是自动给 X 增加一项独立机制证据。</p>
+<h2 id="section-math">百分点、相对准确率与相对错误率</h2>
+<p>同一个变化可以有三种表达。由 80% 到 82%，绝对差是 2 个百分点；相对准确率增加是 <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mo>&#x0002F;</mo><mn>80</mn><mo>&#x0003D;</mo><mn>2.5</mn><mi>&#x00025;</mi></mrow></math>；错误率从 20% 到 18%，相对错误率减少是 <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mo>&#x0002F;</mo><mn>20</mn><mo>&#x0003D;</mo><mn>10</mn><mi>&#x00025;</mi></mrow></math>。</p>
+<p>这三者都能计算，但分母不同。解释指标时明确采用哪一种，才能避免把一个幅度讲成另一个幅度。</p>
+<h2 id="section-scope">把解释停在证据能达到的位置</h2>
+<p>材料没有跨域、未见类别或部署结果，因而这些比较没有提供相应能力的证据。外部预训练的测试集重叠未知，应保留这一解释条件；未知本身不是已经证明的泄漏。</p>
+<p>若研究问题就是 X 的独特机制，最有价值的下一步是匹配容量的替代路径和针对信息交换的干预；若问题是实际使用效果，则整套配置的质量与成本更直接。选择证据取决于问题。</p>
+<details class="supplement"><summary>进一步推导与科学讨论</summary><div class="supplement-content">
+<h2 id="section-review">进一步阅读：怎样提出有区分力的检验</h2>
+<p>重复种子回答固定流程的训练稳定性；同测试样本的预测可支持配对分析；容量匹配的替代路径检验收益是否来自独特机制；跨域协议检验另一类泛化。这些实验各自回答不同问题，不能互相充当替代，也不必全部塞进每一篇论文。</p>
+</div></details>
+</article></main><footer><span>CV Paper Reading</span><a href="analysis-notes.md">科学与构建记录</a></footer>
+<script type="application/json" id="astro-data">{}</script><script></script></body></html>

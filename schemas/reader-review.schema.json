@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Manually authored reader review of the current report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifacts", "reviewer", "test_mode", "retelling", "findings", "verdict", "rationale"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "artifacts": {
+      "type": "object", "additionalProperties": false, "required": ["markdown"],
+      "properties": {
+        "markdown": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "html": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "resources": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+      }
+    },
+    "reviewer": {"enum": ["unrecorded", "self", "independent", "user"]},
+    "test_mode": {"enum": ["unrecorded", "author-reconstruction", "unprompted-reader", "guided-check"]},
+    "retelling": {"type": "string"},
+    "findings": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["location", "missing_connection", "impact", "status", "repair"],
+      "properties": {
+        "location": {"type": "string", "pattern": "\\S"},
+        "missing_connection": {"type": "string", "pattern": "\\S"},
+        "impact": {"enum": ["mainline", "local"]},
+        "status": {"enum": ["open", "resolved"]},
+        "repair": {"type": "string"}
+      }
+    }},
+    "verdict": {"enum": ["pending", "revise", "pass"]},
+    "rationale": {"type": "string"}
+  }
+}

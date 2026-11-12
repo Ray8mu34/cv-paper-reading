@@ -1,3 +1,5 @@
+> 本文件保留继承框架的开发设计资料，不是论文阅读的验收流程；普通阅读遵循 references/quality-gates.md 的内容检查。
+
 ---
 version: alpha
 colors:
@@ -34,11 +36,13 @@ components:
 
 ## Overview
 
-Register: scientific reading tool for astronomy graduate readers, zh-CN.
+Register: scientific reading tool for computer vision graduate readers, zh-CN.
 North Star: a reader who has not opened the PDF understands the research
 problem, contribution, results and argument before entering local mechanisms.
-Its signature is an original-section argument map followed by a few sustained
-scientific questions. The paper determines those questions and their order.
+Its opening gives a coherent account before sustained scientific questions.
+A short original-argument route follows the overview in schema 1.3, while
+the detailed original-section page map remains a later lookup aid. The paper
+determines the questions AND their default order; elaborations stay in place.
 Original figures carry evidence; interaction earns its place through added insight.
 The user brief and references/scientific-integrity.md own scientific boundaries.
 Paper X-Ray Figure Kit informs captions, semantic color and stroke discipline.
@@ -61,8 +65,9 @@ Consolas numbers. Offline fonts have locale-capable fallbacks; no font download.
 
 1100px outer frame, 780px prose measure, 24px gutters; paired figures become one column below
 700px. A restrained 24–34px title gives the research overview room on the first screen.
-The original-section map is visible after the overview; local navigation is a
-native disclosure below it. Scientific mechanisms remain open in the article.
+The detailed original-section map follows prose and supplements in schema
+1.2/1.3 reports; schema 1.3 adds the compact paper-route BEFORE the sections. Local navigation is a native disclosure before the main prose.
+Legacy states retain their layout. Scientific mechanisms remain open in the article.
 Only supplementary derivations use a labeled disclosure. Display equations and wide tables scroll inside their own
 regions. Long prose uses natural page scrolling. SVG geometry has equal axes.
 Controls form a compact grid below each figure; values stay in reserved fields.

@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.3",
+  "status": "ready",
+  "mode": "deep-md",
+  "paper": {
+    "title": "CV 证据阅读示例：从分数提升到模块贡献",
+    "input": "source.md",
+    "version": "synthetic-fixture-v1",
+    "kind": "method"
+  },
+  "coverage": {
+    "level": "full",
+    "read": [
+      "source.md: synthetic §1–§4 and result table"
+    ],
+    "missing": [
+      "Real paper/model/benchmark: not part of this teaching fixture"
+    ],
+    "teaching_only": true
+  },
+  "sources": [
+    {
+      "id": "fixture",
+      "title": "合成教学材料 source.md（非真实论文）",
+      "url": "",
+      "accessed": true,
+      "note": "One local teaching handout; roadmap page=1 identifies this single handout, not a claimed PDF pagination.",
+      "sha256": "f6421b19943e02396dbd246f004c6ad3d7ba820317e9dea1fd8419220438fcbb"
+    }
+  ],
+  "question": "怎样区分配置的分数提升与模块的独立贡献？",
+  "concepts": [],
+  "claims": [
+    {
+      "id": "fixture",
+      "kind": "T",
+      "text": "所有结果为明确标注的合成教学数值。",
+      "evidence": [
+        {
+          "source_id": "fixture",
+          "locator": "§3 合成结果表"
+        }
+      ],
+      "assumptions": []
+    },
+    {
+      "id": "difference",
+      "kind": "D",
+      "text": "80% 到 82% 为增加 2 个百分点，相对准确率增加 2.5%，相对错误率减少 10%。",
+      "evidence": [
+        {
+          "source_id": "fixture",
+          "locator": "§3 Base 与 X"
+        }
+      ],
+      "assumptions": [
+        "Fixed teaching values"
+      ]
+    },
+    {
+      "id": "matched",
+      "kind": "D",
+      "text": "匹配关键训练条件的 X 与 Base matched 相差 0.2 个百分点。",
+      "evidence": [
+        {
+          "source_id": "fixture",
+          "locator": "§3 X 与 Base matched"
+        }
+      ],
+      "assumptions": [
+        "Fixed teaching values"
+      ]
+    },
+    {
+      "id": "conditional",
+      "kind": "I",
+      "text": "不同 recipe 的 2 个百分点不能单独归于 X，匹配对照的数值仍不足以证明机制独特性或显著性。",
+      "evidence": [
+        {
+          "source_id": "fixture",
+          "locator": "§3 条件说明与 §4 解释范围"
+        }
+      ],
+      "assumptions": [
+        "Compare the stated protocols; capacity matching and repeated predictions are absent from the fixture"
+      ]
+    }
+  ],
+  "parameters": [],
+  "assumptions": [
+    "Explicitly synthetic teaching fixture"
+  ],
+  "sections": [
+    {
+      "id": "problem",
+      "role": "background",
+      "title": "为什么要先分清“配置表现”和“模块贡献”？",
+      "markdown": "图像分类模型在测试集上取得更高的 Top-1 准确率，可能来自新增模块，也可能来自预训练、训练时间或分辨率等条件的变化。因此本材料把研究问题表述为：**X 模块究竟提供了多少可以单独归因的提升？** 后面的章节首先说明 X 改变了什么，再用成组对照回答这一问题。",
+      "claim_ids": [
+        "fixture"
+      ],
+      "source_sections": [
+        "§1"
+      ]
+    },
+    {
+      "id": "comparison",
+      "role": "method",
+      "title": "比较时真正被改变了哪些条件？",
+      "markdown": "该合成研究在 backbone S 上增加一条特征交互路径 X。可以确定的是：模型的信息交互方式发生了变化；材料没有给出 X 的内部算子、张量维度或梯度实现，因此无法推导交互机制的具体行为。接下来需要观察训练配置与测试结果，尤其要寻找保持其余关键条件尽可能一致、主要只改变 X 的比较。",
+      "claim_ids": [
+        "fixture",
+        "difference"
+      ],
+      "source_sections": [
+        "§2"
+      ]
+    },
+    {
+      "id": "evidence",
+      "role": "evidence",
+      "title": "匹配对照究竟提供了多少信息？",
+      "markdown": "§3 提供了四组采用相同测试 split 和 Top-1 指标的教学数据：\n\n|配置|训练数据|epochs|分辨率|Top-1 (%)|\n|---|---|---|---|---|\n|Base|目标数据|100|224|80.0|\n|X|目标+外部预训练|300|224|82.0|\n|Base matched|目标+外部预训练|300|224|81.8|\n|X large|目标+外部预训练|300|384|83.0|\n\n*固定的合成教学数值，没有真实训练或统计重复。*\n\n表中最先吸引注意的是 X 比 Base 高 2 个百分点。但 X 还使用了额外预训练数据和更长训练安排，因此这一列差异对应**整套配置**。Base matched 与 X 则在表明的主要训练条件、输入分辨率与评估方式上对齐，把问题缩小到新增路径的作用：在这组数据中，两者只差 0.2 个百分点。X large 的 83.0% 也有用：它展示了再改变输入分辨率会改变系统结果，但不能把这个分辨率效应记到 X 的独立贡献上。",
+      "claim_ids": [
+        "matched",
+        "conditional"
+      ],
+      "source_sections": [
+        "§3"
+      ]
+    },
+    {
+      "id": "math",
+      "role": "derivation",
+      "title": "百分点、相对准确率与相对错误率",
+      "markdown": "同一个改善幅度可以采用不同分母描述。由 80% 到 82%，准确率的绝对差是 **2 个百分点**；相对准确率的变化为 $2/80=2.5\\%$；错误率由 20% 降到 18%，相对错误率下降 $2/20=10\\%$。三者都正确，但讲的是不同量。若要评价 X 的单独增益，应优先使用 X 与 Base matched 的 0.2 个百分点，而非直接从 80% 开始计算。",
+      "claim_ids": [
+        "difference"
+      ],
+      "source_sections": [
+        "§3"
+      ]
+    },
+    {
+      "id": "scope",
+      "role": "limitations",
+      "title": "把解释停在证据能达到的位置",
+      "markdown": "§4 回到最初的归因问题。匹配对照使 X 的配置差异更容易解释，但新增路径也改变模型容量，材料没有容量匹配的替代实现，所以尚无法判断收益究竟来自特定的信息交互设计还是更一般的容量增加。另一方面，每行只有一个固定数值，缺少重复运行或逐样本预测，不能估计训练波动。若要研究跨域适应、未见类别或效率，还需要相应实验，因为本文数据没有测量这些对象。最直接的后续检验是容量匹配的替代路径与更明确的机制干预。",
+      "claim_ids": [
+        "conditional"
+      ],
+      "source_sections": [
+        "§4"
+      ]
+    },
+    {
+      "id": "review",
+      "role": "review",
+      "title": "进一步阅读：怎样提出有区分力的检验",
+      "audience": "appendix",
+      "markdown": "重复种子回答固定流程的训练稳定性；同测试样本的预测可支持配对分析；容量匹配的替代路径检验收益是否来自独特机制；跨域协议检验另一类泛化。这些实验各自回答不同问题，不能互相充当替代，也不必全部塞进每一篇论文。",
+      "claim_ids": [
+        "conditional"
+      ]
+    },
+    {
+      "id": "ledger",
+      "role": "review",
+      "title": "执行与来源记录",
+      "audience": "internal",
+      "markdown": "PRIVATE_CV_EXECUTION_MARKER\n\n本材料由项目作者合成，用于验证渲染和证据分层。没有真实模型训练或推断。没有选用交互：表格和连续解释足以说明对照条件。",
+      "claim_ids": [
+        "fixture"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Training seed variability",
+    "Per-example predictions",
+    "Capacity-matched mechanism control",
+    "Pretraining overlap"
+  ],
+  "reproduction": {
+    "status": "teaching",
+    "notes": [
+      "No training or inference executed; deterministic synthetic material"
+    ]
+  },
+  "artifacts": {
+    "markdown": "report.md",
+    "html": "report.html",
+    "notes": "analysis-notes.md"
+  },
+  "reader": {
+    "overview": "这份合成教学材料讨论一个常见的 CV 阅读问题：新模块的配置分数更高时，究竟能得到多强的结论？最初比较从 80% 到 82%，同时改变了预训练和训练安排；匹配关键条件后，差值只有 0.2 个百分点。先区分整套配置的表现与模块归因，再解释匹配对照、机制与统计判断如何连接。",
+    "roadmap": [
+      {
+        "section": "§1",
+        "title": "问题",
+        "argument": "区分实际配置表现与模块的贡献",
+        "focus": "分类任务与归因问题",
+        "source_id": "fixture",
+        "page": 1
+      },
+      {
+        "section": "§2",
+        "title": "方法与信息",
+        "argument": "定位模块改变，并明确本材料不提供架构机制",
+        "focus": "backbone 与 X 路径",
+        "source_id": "fixture",
+        "page": 1
+      },
+      {
+        "section": "§3",
+        "title": "结果",
+        "argument": "提供可比较和不可直接归因的条件对照",
+        "focus": "合成结果表与单次结果条件",
+        "source_id": "fixture",
+        "page": 1
+      },
+      {
+        "section": "§4",
+        "title": "解释范围",
+        "argument": "限定结论并指向有区分力的实验",
+        "focus": "机制、稳定性与泛化的证据范围",
+        "source_id": "fixture",
+        "page": 1
+      }
+    ],
+    "focus": [
+      {
+        "section_id": "comparison",
+        "question": "2 个百分点为什么不等于模块的独立收益？",
+        "why": "中心归因问题"
+      },
+      {
+        "section_id": "evidence",
+        "question": "匹配对照能支持哪一层结论？",
+        "why": "区分观察、机制与显著性"
+      }
+    ],
+    "organization": "paper-order",
+    "departure_reason": "",
+    "argument_route": "本合成材料按 §1–§4 展开：§1 首先说明图像分类准确率与模块独立贡献为何需要区分；§2 引入 X 路径并指出哪些技术细节未知；§3 给出四组教学数字，先建立匹配对照再说明不同分数比较能够回答什么；§4 最后明确哪些机制、稳定性和泛化主张还没有被这些数字检验。",
+    "throughline": "§1 提出整套训练配置表现与 X 的独立贡献这一研究判断问题。§2 给出原有 backbone 与新增 X 交互路径，但架构不详，所以只评价比较协议。§3 对比分辨率、外部预训练和训练轮数不同的行，找出 Base matched 与 X 这对更能隔离 X 的对照，解释百分点与相对变化，以及未提供独立样本或重复实验的意义。§4 说明这仍不能证明机制、跨域泛化或真实效率；更进一步的检验需额外数据。",
+    "connections": [
+      {
+        "section_id": "problem",
+        "needs": "已经知道基本图像分类任务；尚未区分性能和机制归因。",
+        "adds": "明确提出要检验 X 的独立贡献，知道为何需要匹配对照。"
+      },
+      {
+        "section_id": "comparison",
+        "needs": "§1 已提出“改善来自哪里”的问题。",
+        "adds": "看到 X 的角色与技术细节边界，知道比较必须考虑配置变化。"
+      },
+      {
+        "section_id": "evidence",
+        "needs": "§2 已确定需区分 X 变化与额外训练信息。",
+        "adds": "找到匹配对照，并理解全配置结果与单机制归因的证据差别。"
+      },
+      {
+        "section_id": "math",
+        "needs": "§3 已识别可以比较的数值。",
+        "adds": "分清百分点、相对准确率与相对错误率，避免夸大收益。"
+      },
+      {
+        "section_id": "scope",
+        "needs": "§3 的单次数值已提供配置表现和有限的匹配证据。",
+        "adds": "解释证据没有覆盖的机制、稳定性和泛化主张，并提出下一步检验。"
+      }
+    ]
+  },
+  "visuals": []
+}
